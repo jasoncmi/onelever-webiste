@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-brand-primary: #0056a7; /* Roadmap Blue */
+  --color-brand-secondary: #007cba; /* Lighter Blue */
+  --color-brand-dark: #09090b; /* Zinc 950 */
+  --color-bg-dark: #09090b; /* Zinc 950 */
+}
+
+@layer base {
+  body {
+    @apply bg-zinc-950 text-zinc-100 font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+}
+
+.glass {
+  @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
+}
+
+.glass-dark {
+  @apply bg-zinc-900/50 backdrop-blur-xl border border-white/5 shadow-2xl;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#0056a7] to-[#007cba];
+}
+
+.bg-gradient-mesh {
+  background-color: #09090b;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(209, 100%, 33%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(199, 100%, 36%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(209, 100%, 33%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(199, 100%, 36%, 0.1) 0px, transparent 50%);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
