@@ -6,15 +6,15 @@
   --font-display: "Outfit", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --color-brand-primary: #0056a7; /* Roadmap Blue */
-  --color-brand-secondary: #007cba; /* Lighter Blue */
-  --color-brand-dark: #09090b; /* Zinc 950 */
-  --color-bg-dark: #09090b; /* Zinc 950 */
+  --color-brand-primary: #c2823a; /* Bronze CTA */
+  --color-brand-secondary: #d49650; /* Lighter Bronze */
+  --color-brand-dark: #1a2332; /* Deep Slate Blue */
+  --color-bg-dark: #1a2332; /* Deep Slate Blue */
 }
 
 @layer base {
   body {
-    @apply bg-zinc-950 text-zinc-100 font-sans antialiased;
+    @apply bg-[#1a2332] text-zinc-100 font-sans antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -35,12 +35,12 @@
 }
 
 .bg-gradient-mesh {
-  background-color: #09090b;
+  background-color: #1a2332;
   background-image: 
-    radial-gradient(at 0% 0%, hsla(209, 100%, 33%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(199, 100%, 36%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(209, 100%, 33%, 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(199, 100%, 36%, 0.1) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, hsla(32, 54%, 49%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(32, 54%, 55%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(217, 32%, 15%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(217, 32%, 18%, 0.1) 0px, transparent 50%);
 }
 
 @keyframes float {
