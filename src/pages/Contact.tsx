@@ -19,7 +19,7 @@ export const Contact = () => {
 
     try {
       // Use environment variable for the endpoint, fallback to a placeholder text if not set
-      const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT || 'https://formspree.io/f/placeholder';
+      const endpoint = (import.meta as any).env.VITE_CONTACT_FORM_ENDPOINT || 'https://formspree.io/f/placeholder';
       
       const response = await fetch(endpoint, {
         method: 'POST',
