@@ -1,8 +1,55 @@
-import React from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Phone, MapPin, Loader2, CheckCircle2 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
 export const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      // Use environment variable for the endpoint, fallback to a placeholder text if not set
+      const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT || 'https://formspree.io/f/placeholder';
+      
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', company: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   return (
     <div className="pt-32 pb-24 bg-[#1a2332] min-h-screen">
       <Helmet>
@@ -27,27 +74,88 @@ export const Contact = () => {
             <div className="grid lg:grid-cols-5 gap-16">
               
               <div className="lg:col-span-3">
-                <form className="space-y-6">
-                  <div>
-                    <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">Your Name</label>
-                    <input type="text" placeholder="John Doe" className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600" />
+                {submitStatus === 'success' ? (
+                  <div className="bg-[#1a2332] border border-[#c2823a]/50 rounded-2xl p-8 text-center">
+                    <div className="w-16 h-16 bg-[#c2823a]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <CheckCircle2 className="text-[#c2823a] w-8 h-8" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">Message Received</h3>
+                    <p className="text-zinc-400">
+                      Thanks for reaching out! We've received your information and we'll be in touch within one business day.
+                    </p>
                   </div>
-                  <div>
-                    <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">Email</label>
-                    <input type="email" placeholder="john@company.com" className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600" />
-                  </div>
-                  <div>
-                    <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">Company Name</label>
-                    <input type="text" placeholder="Acme Corp" className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600" />
-                  </div>
-                  <div>
-                    <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">What's the biggest problem in your business right now?</label>
-                    <textarea placeholder="Tell us what's broken or taking too much time..." rows={4} className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600"></textarea>
-                  </div>
-                  <button type="button" className="w-full py-4 bg-[#c2823a] hover:bg-[#d49650] text-white font-bold rounded-2xl transition-all shadow-xl shadow-[#c2823a]/20 cursor-pointer text-lg">
-                    Let's talk
-                  </button>
-                </form>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">Your Name</label>
+                      <input 
+                        type="text" 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        placeholder="John Doe" 
+                        className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600" 
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">Email</label>
+                      <input 
+                        type="email" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        placeholder="john@company.com" 
+                        className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600" 
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">Company Name</label>
+                      <input 
+                        type="text" 
+                        name="company"
+                        value={formData.company}
+                        onChange={handleChange}
+                        placeholder="Acme Corp" 
+                        className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600" 
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-bold text-zinc-300 uppercase tracking-widest mb-2 block">What's the biggest problem in your business right now?</label>
+                      <textarea 
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        required
+                        placeholder="Tell us what's broken or taking too much time..." 
+                        rows={4} 
+                        className="w-full bg-[#1a2332] border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#c2823a]/50 transition-all text-white placeholder:text-zinc-600"
+                      ></textarea>
+                    </div>
+
+                    {submitStatus === 'error' && (
+                      <div className="text-red-400 text-sm font-medium p-4 bg-red-400/10 rounded-xl border border-red-400/20">
+                        There was an error sending your message. Please try again or email us directly at hello@onelever.com.
+                      </div>
+                    )}
+
+                    <button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className="w-full py-4 flex items-center justify-center gap-2 bg-[#c2823a] hover:bg-[#d49650] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl transition-all shadow-xl shadow-[#c2823a]/20 cursor-pointer text-lg"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="animate-spin w-5 h-5" />
+                          Sending...
+                        </>
+                      ) : (
+                        "Let's talk"
+                      )}
+                    </button>
+                  </form>
+                )}
               </div>
 
               <div className="lg:col-span-2 space-y-12">
